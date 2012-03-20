@@ -25,7 +25,7 @@ mocha.addFile('test/acceptance/pending.js');
 mocha.addFile('test/acceptance/timeout.js');
 
 mocha.run(function(){
-  console.log('done');
+  process.stdout.write('done\n');
 }).on('pass', function(test){
-  // console.log('... %s', test.title);
+  // process.stdout.write('... %s', test.title+'\n');
 });

@@ -1,57 +1,57 @@
 
 describe('one', function(){
   before(function(){
-    console.log('before one');
+    process.stdout.write('before one'+'\n');
   })
   
   after(function(){
-    console.log('after one');
+    process.stdout.write('after one'+'\n');
   })
   
   beforeEach(function(){
-    console.log('  before each one');
+    process.stdout.write('  before each one'+'\n');
   })
 
   afterEach(function(){
-    console.log('  after each one');
+    process.stdout.write('  after each one'+'\n');
   })
 
   describe('two', function(){
     before(function(){
-      console.log('  before two');
+      process.stdout.write('  before two'+'\n');
     })
     
     after(function(){
-      console.log('  after two');
+      process.stdout.write('  after two'+'\n');
     })
     
     beforeEach(function(){
-      console.log('    before each two');
+      process.stdout.write('    before each two'+'\n');
     })
     
     afterEach(function(){
-      console.log('    after each two');
+      process.stdout.write('    after each two'+'\n');
     })
     
     describe('three', function(){
       before(function(){
-        console.log('    before three');
+        process.stdout.write('    before three'+'\n');
       })
       
       after(function(){
-        console.log('    after three');
+        process.stdout.write('    after three'+'\n');
       })
 
       beforeEach(function(){
-        console.log('    before each three');
+        process.stdout.write('    before each three'+'\n');
       })
       
       afterEach(function(){
-        console.log('    after each three');
+        process.stdout.write('    after each three'+'\n');
       })
 
       it('should three', function(){
-        console.log('      TEST three');
+        process.stdout.write('      TEST three'+'\n');
       })
     })
   })

@@ -1125,7 +1125,7 @@ Base.prototype.epilogue = function(){
   var stats = this.stats
     , fmt;
 
-  console.log();
+  process.stdout.write('\n');
 
   // failure
   if (stats.failures) {
@@ -1144,8 +1144,8 @@ Base.prototype.epilogue = function(){
     + color('green', ' %d tests complete')
     + color('light', ' (%dms)');
 
-  console.log(fmt, stats.tests || 0, stats.duration);
-  console.log();
+  process.stdout.write(fmt, stats.tests || 0, stats.duration+'\n');
+  process.stdout.write('\n');
 };
 
 /**
@@ -1232,24 +1232,24 @@ function Doc(runner) {
   runner.on('suite', function(suite){
     if (suite.root) return;
     ++indents;
-    console.log('%s<section class="suite">', indent());
+    process.stdout.write('%s<section class="suite">', indent()+'\n');
     ++indents;
-    console.log('%s<h1>%s</h1>', indent(), suite.title);
-    console.log('%s<dl>', indent());
+    process.stdout.write('%s<h1>%s</h1>', indent(), suite.title+'\n');
+    process.stdout.write('%s<dl>', indent()+'\n');
   });
 
   runner.on('suite end', function(suite){
     if (suite.root) return;
-    console.log('%s</dl>', indent());
+    process.stdout.write('%s</dl>', indent()+'\n');
     --indents;
-    console.log('%s</section>', indent());
+    process.stdout.write('%s</section>', indent()+'\n');
     --indents;
   });
 
   runner.on('pass', function(test){
-    console.log('%s  <dt>%s</dt>', indent(), test.title);
+    process.stdout.write('%s  <dt>%s</dt>', indent(), test.title+'\n');
     var code = utils.escape(clean(test.fn.toString()));
-    console.log('%s  <dd><pre><code>%s</code></pre></dd>', indent(), code);
+    process.stdout.write('%s  <dd><pre><code>%s</code></pre></dd>', indent(), code+'\n');
   });
 }
 
@@ -1325,7 +1325,7 @@ function Dot(runner) {
   });
 
   runner.on('end', function(){
-    console.log();
+    process.stdout.write('\n');
     self.epilogue();
   });
 }
@@ -1798,15 +1798,15 @@ function List(runner) {
     , total = runner.total;
 
   runner.on('start', function(){
-    console.log(JSON.stringify(['start', { total: total }]));
+    process.stdout.write(JSON.stringify(['start', { total: total }])+'\n');
   });
 
   runner.on('pass', function(test){
-    console.log(JSON.stringify(['pass', clean(test)]));
+    process.stdout.write(JSON.stringify(['pass', clean(test)])+'\n');
   });
 
   runner.on('fail', function(test, err){
-    console.log(JSON.stringify(['fail', clean(test)]));
+    process.stdout.write(JSON.stringify(['fail', clean(test)])+'\n');
   });
 
   runner.on('end', function(){
@@ -1993,7 +1993,7 @@ function Landing(runner) {
 
   runner.on('end', function(){
     cursor.show();
-    console.log();
+    process.stdout.write('\n');
     self.epilogue();
   });
 }
@@ -2038,7 +2038,7 @@ function List(runner) {
     , n = 0;
 
   runner.on('start', function(){
-    console.log();
+    process.stdout.write('\n');
   });
 
   runner.on('test', function(test){
@@ -2048,7 +2048,7 @@ function List(runner) {
   runner.on('pending', function(test){
     var fmt = color('checkmark', '  -')
       + color('pending', ' %s');
-    console.log(fmt, test.fullTitle());
+    process.stdout.write(fmt, test.fullTitle()+'\n');
   });
 
   runner.on('pass', function(test){
@@ -2056,12 +2056,12 @@ function List(runner) {
       + color('pass', ' %s: ')
       + color(test.speed, '%dms');
     cursor.CR();
-    console.log(fmt, test.fullTitle(), test.duration);
+    process.stdout.write(fmt, test.fullTitle(), test.duration+'\n');
   });
 
   runner.on('fail', function(test, err){
     cursor.CR();
-    console.log(color('fail', '  %d) %s'), ++n, test.fullTitle());
+    process.stdout.write(color('fail', '  %d) %s'), ++n, test.fullTitle()+'\n');
   });
 
   runner.on('end', self.epilogue.bind(self));
@@ -2127,7 +2127,7 @@ function Progress(runner, options) {
 
   // tests started
   runner.on('start', function(){
-    console.log();
+    process.stdout.write('\n');
     cursor.hide();
   });
 
@@ -2153,7 +2153,7 @@ function Progress(runner, options) {
   // and the failures if any
   runner.on('end', function(){
     cursor.show();
-    console.log();
+    process.stdout.write('\n');
     self.epilogue();
   });
 }
@@ -2204,17 +2204,17 @@ function Spec(runner) {
   }
 
   runner.on('start', function(){
-    console.log();
+    process.stdout.write('\n');
   });
 
   runner.on('suite', function(suite){
     ++indents;
-    console.log(color('suite', '%s%s'), indent(), suite.title);
+    process.stdout.write(color('suite', '%s%s'), indent(), suite.title+'\n');
   });
 
   runner.on('suite end', function(suite){
     --indents;
-    if (1 == indents) console.log();
+    if (1 == indents) process.stdout.write('\n');
   });
 
   runner.on('test', function(test){
@@ -2223,7 +2223,7 @@ function Spec(runner) {
 
   runner.on('pending', function(test){
     var fmt = indent() + color('pending', '  - %s');
-    console.log(fmt, test.title);
+    process.stdout.write(fmt, test.title+'\n');
   });
 
   runner.on('pass', function(test){
@@ -2232,20 +2232,20 @@ function Spec(runner) {
         + color('checkmark', '  ✓')
         + color('pass', ' %s ');
       cursor.CR();
-      console.log(fmt, test.title);
+      process.stdout.write(fmt, test.title+'\n');
     } else {
       var fmt = indent()
         + color('checkmark', '  ✓')
         + color('pass', ' %s ')
         + color(test.speed, '(%dms)');
       cursor.CR();
-      console.log(fmt, test.title, test.duration);
+      process.stdout.write(fmt, test.title, test.duration+'\n');
     }
   });
 
   runner.on('fail', function(test, err){
     cursor.CR();
-    console.log(indent() + color('fail', '  %d) %s'), ++n, test.title);
+    process.stdout.write(indent() + color('fail', '  %d) %s'), ++n, test.title+'\n');
   });
 
   runner.on('end', self.epilogue.bind(self));
@@ -2293,7 +2293,7 @@ function TAP(runner) {
     , n = 1;
 
   runner.on('start', function(){
-    console.log('%d..%d', 1, total);
+    process.stdout.write('%d..%d', 1, total+'\n');
   });
 
   runner.on('test end', function(){
@@ -2301,16 +2301,16 @@ function TAP(runner) {
   });
 
   runner.on('pending', function(test){
-    console.log('ok %d %s # SKIP -', n, title(test));
+    process.stdout.write('ok %d %s # SKIP -', n, title(test)+'\n');
   });
 
   runner.on('pass', function(test){
-    console.log('ok %d %s', n, title(test));
+    process.stdout.write('ok %d %s', n, title(test)+'\n');
   });
 
   runner.on('fail', function(test, err){
-    console.log('not ok %d %s', n, title(test));
-    console.log(err.stack.replace(/^/gm, '  '));
+    process.stdout.write('not ok %d %s', n, title(test)+'\n');
+    process.stdout.write(err.stack.replace(/^/gm, '  ')+'\n');
   });
 }
 
@@ -2354,27 +2354,27 @@ function Teamcity(runner) {
   var stats = this.stats;
 
   runner.on('start', function() {
-    console.log("##teamcity[testSuiteStarted name='mocha.suite']");
+    process.stdout.write("##teamcity[testSuiteStarted name='mocha.suite']"+'\n');
   });
 
   runner.on('test', function(test) {
-    console.log("##teamcity[testStarted name='%s']", escape(test.fullTitle()));
+    process.stdout.write("##teamcity[testStarted name='%s']", escape(test.fullTitle())+'\n');
   });
 
   runner.on('fail', function(test, err) {
-    console.log("##teamcity[testFailed name='%s' message='%s']", escape(test.fullTitle()), escape(err.message));
+    process.stdout.write("##teamcity[testFailed name='%s' message='%s']", escape(test.fullTitle()), escape(err.message)+'\n');
   });
 
   runner.on('pending', function(test) {
-    console.log("##teamcity[testIgnored name='%s' message='pending']", escape(test.fullTitle()));
+    process.stdout.write("##teamcity[testIgnored name='%s' message='pending']", escape(test.fullTitle())+'\n');
   });
 
   runner.on('test end', function(test) {
-    console.log("##teamcity[testFinished name='%s' duration='%s']", escape(test.fullTitle()), test.duration);
+    process.stdout.write("##teamcity[testFinished name='%s' duration='%s']", escape(test.fullTitle()), test.duration+'\n');
   });
 
   runner.on('end', function() {
-    console.log("##teamcity[testSuiteFinished name='mocha.suite' duration='%s']", stats.duration);
+    process.stdout.write("##teamcity[testSuiteFinished name='mocha.suite' duration='%s']", stats.duration+'\n');
   });
 }
 
@@ -2432,7 +2432,7 @@ function XUnit(runner) {
     }, false));
 
     tests.forEach(test);
-    console.log('</testsuite>');    
+    process.stdout.write('</testsuite>'+'\n');    
   });
 }
 
@@ -2458,11 +2458,11 @@ function test(test) {
   if ('failed' == test.state) {
     var err = test.err;
     attrs.message = escape(err.message);
-    console.log(tag('testcase', attrs, false, tag('failure', attrs, false, cdata(err.stack))));
+    process.stdout.write(tag('testcase', attrs, false, tag('failure', attrs, false, cdata(err.stack)))+'\n');
   } else if (test.pending) {
-    console.log(tag('testcase', attrs, false, tag('skipped', {}, true)));
+    process.stdout.write(tag('testcase', attrs, false, tag('skipped', {}, true))+'\n');
   } else {
-    console.log(tag('testcase', attrs, true) );
+    process.stdout.write(tag('testcase', attrs, true) +'\n');
   }
 }
 
